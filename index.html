@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pie Chart Example</title>
+</head>
+<body style="height: 100%; margin: 0">
+  <div id="container" style="height: 100%"></div>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+
+  <script type="text/javascript">
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    
+    var option;
+
+    option = {
+      tooltip: {
+        trigger: 'item',
+        formatter: function(params) {
+          // Format currency value
+          function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+              style: 'currency',
+              currency: 'BRL'
+            }).format(value);
+          }
+
+          // Bold text only on item name
+          return `${params.marker}<strong style="color: ${params.color};">${params.name}</strong>: <strong>${params.value}</strong> <strong>(${params.percent}%)</strong><br/><strong>Valor:</strong> ${formatCurrency(params.data.additionalValue)}`;
+        }
+      },
+      legend: {
+        top: '5%',
+        left: 'center'
+      },
+      series: [
+        {
+          name: 'Access From',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2
+          },
+          label: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 25,
+              fontWeight: 'bold'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          data: [
+            { value: 13, name: 'Danos Elétricos', additionalValue: 19393.00, itemStyle: { color: ' #002b4d' } },
+            { value: 1, name: 'Desligamento', additionalValue: 296.96, itemStyle: { color: '#606d80' } },
+            { value: 1, name: 'Devolução de Crédito', additionalValue: 202.93, itemStyle: { color: '#567ebb' } },
+            { value: 4, name: 'Fornecer Documentação', additionalValue: 5136.42, itemStyle: { color: '#2b4c7e' } },
+            { value: 1, name: 'Reclamação cliente', additionalValue: 74.43, itemStyle: { color: '#dce0e6' } }
+          ]
+        }
+      ]
+    };
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', function () {
+      myChart.resize();
+    });
+  </script>
+</body>
+</html>
